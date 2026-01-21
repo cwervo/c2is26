@@ -1,1 +1,1 @@
-# c2is26
+# Core 2: Interaction @ Parsons
