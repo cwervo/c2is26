@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS Animation Pair Lab: 10 Ways to Move</title>
+    <style>
+        /* ========================================================================
+           BASE STYLES: The Canvas
+           ======================================================================== */
+        :root {
+            --bg: #fafafa;
+            --text: #171717;
+            --card-bg: #ffffff;
+            --border: #e5e5e5;
+            --accent: #2563eb;
+            --shape-bg: #d4d4d8;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 4rem 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            text-align: center;
+            max-width: 600px;
+            margin-bottom: 4rem;
+        }
+
+        .lab-container {
+            display: flex;
+            flex-direction: column;
+            gap: 4rem;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .challenge-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        @media (max-width: 768px) {
+            .challenge-card { grid-template-columns: 1fr; }
+        }
+
+        .instructions h2 {
+            margin-top: 0;
+            font-size: 1.25rem;
+            color: var(--accent);
+        }
+
+        .instructions p {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #52525b;
+        }
+
+        .swap-alert {
+            display: inline-block;
+            background: #fef08a;
+            color: #854d0e;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        /* The Playground Elements */
+        .stage {
+            background: var(--bg);
+            border-radius: 12px;
+            height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            border: 1px dashed #a1a1aa;
+        }
+
+        .shape {
+            width: 80px;
+            height: 80px;
+            background: var(--shape-bg);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Smooth default transition */
+            cursor: pointer;
+        }
+
+        /* ========================================================================
+           CUSTOM CSS CLASSES: Modify these to change the animations!
+           ======================================================================== */
+        
+        /* Ex 1: The Toggle */
+        .is-toggled {
+            background: #ef4444;
+            transform: scale(1.2) rotate(15deg);
+            border-radius: 50%;
+        }
+
+        /* Ex 2: Hover State is handled purely in JS for this example */
+
+        /* Ex 3: Randomness */
+        .randomized {
+            /* Styles applied via inline JS! */
+        }
+
+        /* Ex 4: CSS Variables for Mouse Tracking */
+        #stage-4 {
+            --mouse-x: 50%;
+            --mouse-y: 50%;
+        }
+        #shape-4 {
+            /* This gradient moves with the mouse via JS updating the variables */
+            background: radial-gradient(circle at var(--mouse-x) var(--mouse-y), #8b5cf6 0%, var(--shape-bg) 70%);
+        }
+
+        /* Ex 5: Scroll Observer */
+        #shape-5 {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1s ease-out;
+        }
+        #shape-5.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+            background: #10b981;
+        }
+
+        /* Ex 6: The Metronome */
+        .is-ticking {
+            transform: scale(0.8);
+            background: #f59e0b;
+        }
+
+        /* Ex 10: Chain Reaction */
+        .chain-item {
+            width: 30px; height: 30px; margin: 0 5px; background: var(--shape-bg); transition: all 0.4s ease;
+        }
+        .chain-active {
+            transform: translateY(-20px);
+            background: #ec4899;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>10 Ways to Move</h1>
+        <p>A pair-programming lab. Trade the keyboard (Driver) and the manual (Navigator) every time you see a <strong>SWAP</strong> badge. Experiment with the code and see how it breaks!</p>
+    </header>
+
+    <div class="lab-container">
+
+        <!-- Example 1 -->
+        <div class="challenge-card">
+            <div class="instructions">
+                <span class="swap-alert">DRIVER 1</span>
+                <h2>1. The Basic Toggle (Click)</h2>
+                <p><strong>Focus:</strong> Toggling CSS classes.</p>
+                <p>Clicking the shape toggles a class. In the CSS above, modify <code>.is-toggled</code> to make it do something wilder than just turning red and rotating.</p>
+            </div>
+            <div class="stage" id="stage-1"><div class="shape" id="shape-1">Click</div></div>
+        </div>
+
+        <!-- Example 2 -->
+        <div class="challenge-card">
+            <div class="instructions">
+                <span class="swap-alert">SWAP! DRIVER 2</span>
+                <h2>2. The Hover (Mouseenter / Mouseleave)</h2>
+                <p><strong>Focus:</strong> Hover events & text manipulation.</p>
+                <p>Update the JavaScript so the text inside the box changes when you hover, and changes back when the mouse leaves. Make it change its width too.</p>
+            </div>
+            <div class="stage" id="stage-2"><div class="shape" id="shape-2">Hover</div></div>
+        </div>
+
+        <!-- Example 3 -->
+        <div class="challenge-card">
+            <div class="instructions">
+                <span class="swap-alert">SWAP! DRIVER 1</span>
+                <h2>3. The Randomizer (Math.random)</h2>
+                <p><strong>Focus:</strong> Inline style manipulation & Math.</p>
+                <p>Every time you click, generate a random color or a random scale value. We provided the math logic, you apply it to the element's style.</p>
+            </div>
+            <div class="stage" id="stage-3"><div class="shape" id="shape-3">Chaos</div></div>
+        </div>
+
+        <!-- Example 4 -->
+        <div class="challenge-card">
+            <div class="instructions">
+                <span class="swap-alert">SWAP! DRIVER 2</span>
+                <h2>4. The Tracker (Mousemove)</h2>
+                <p><strong>Focus:</strong> Connecting JS math to CSS Variables.</p>
+                <p>We are tracking the mouse's X and Y position inside the stage. Update the code to pass those numbers into the CSS variables so the gradient follows your cursor.</p>
+            </div>
+            <div class="stage" id="stage-4"><div class="shape" id="shape-4" style="width:100%; height:100%; border-radius:0;">Track</div></div>
+        </div>
+
+        <!-- Example 5 -->
+        <div class="challenge-card">
+            <div class="instructions">
+                <span class="swap-alert">SWAP! DRIVER 1</span>
+                <h2>5. The Observer (Scroll)</h2>
+                <p><strong>Focus:</strong> Intersection Observer API.</p>
+                <p>This shape is invisible. When you scroll it into view, the Observer detects it. Add the logic to add the <code>.is-visible</code> class when it intersects.</p>
+            </div>
+            <div class="stage" id="stage-5"><div class="shape" id="shape-5">Hello!</div></div>
+        </div>
+
+        <!-- Example 6 -->
+        <div class="challenge-card">
+            <div class="instructions">
+                <span class="swap-alert">SWAP! DRIVER 2</span>
+                <h2>6. The Metronome (setInterval)</h2>
+                <p><strong>Focus:</strong> Time-based loops.</p>
+                <p>This animation happens without the user. Set an interval to toggle the <code>.is-ticking</code> class on the shape every 800 milliseconds.</p>
+            </div>
+            <div class="stage" id="stage-6"><div class="shape" id="shape-6">Tick</div></div>
+        </div>
+
+        <!-- Example 7 -->
+        <div class="challenge-card">
+            <div class="instructions">
+                <span class="swap-alert">SWAP! DRIVER 1</span>
+                <h2>7. The Fluid Engine (requestAnimationFrame)</h2>
+                <p><strong>Focus:</strong> 60fps continuous animation.</p>
+                <p>Instead of relying on CSS transitions, use JS to continuously update the rotation variable frame-by-frame. Un-comment the requestAnimationFrame call!</p>
+            </div>
+            <div class="stage" id="stage-7"><div class="shape" id="shape-7">Spin</div></div>
+        </div>
+
+        <!-- Example 8 -->
+        <div class="challenge-card">
+            <div class="instructions">
+                <span class="swap-alert">SWAP! DRIVER 2</span>
+                <h2>8. The Keypress (keydown)</h2>
+                <p><strong>Focus:</strong> Global window events.</p>
+                <p>Listen for specific keys on your keyboard (like 'Space' or 'ArrowRight'). Make the box jump or move when you press that key.</p>
+            </div>
+            <div class="stage" id="stage-8"><div class="shape" id="shape-8">Press Space</div></div>
+        </div>
+
+        <!-- Example 9 -->
+        <div class="challenge-card">
+            <div class="instructions">
+                <span class="swap-alert">SWAP! DRIVER 1</span>
+                <h2>9. The Delay (setTimeout)</h2>
+                <p><strong>Focus:</strong> Asynchronous timing.</p>
+                <p>When clicked, change the background color. But wait exactly 1.5 seconds (1500ms) before changing it back using <code>setTimeout</code>.</p>
+            </div>
+            <div class="stage" id="stage-9"><div class="shape" id="shape-9">Wait for it</div></div>
+        </div>
+
+        <!-- Example 10 -->
+        <div class="challenge-card">
+            <div class="instructions">
+                <span class="swap-alert">SWAP! DRIVER 2</span>
+                <h2>10. The Chain Reaction (forEach + Index)</h2>
+                <p><strong>Focus:</strong> Staggering multiple elements.</p>
+                <p>We created 5 small boxes. When the stage is hovered, loop through them and use their <code>index</code> to delay their animation, creating a wave effect.</p>
+            </div>
+            <div class="stage" id="stage-10">
+                <div class="chain-item"></div><div class="chain-item"></div><div class="chain-item"></div><div class="chain-item"></div><div class="chain-item"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        /* ========================================================================
+           JAVASCRIPT EXERCISES
+           Read the comments and complete the TODOs!
+           ======================================================================== */
+
+        // --- 1. The Basic Toggle ---
+        const shape1 = document.getElementById('shape-1');
+        shape1.addEventListener('click', () => {
+            // TODO: Toggle the 'is-toggled' class on shape1
+            shape1.classList.toggle('is-toggled');
+        });
+
+        // --- 2. The Hover ---
+        const shape2 = document.getElementById('shape-2');
+        shape2.addEventListener('mouseenter', () => {
+            // TODO: Change the innerText to something else
+            shape2.innerText = "Whoa!";
+            // TODO: Change the element's width using inline styles
+            shape2.style.width = "150px";
+            shape2.style.background = "#8b5cf6";
+        });
+        shape2.addEventListener('mouseleave', () => {
+            // TODO: Reset the text and styles when the mouse leaves
+            shape2.innerText = "Hover";
+            shape2.style.width = "80px";
+            shape2.style.background = "var(--shape-bg)";
+        });
+
+        // --- 3. The Randomizer ---
+        const shape3 = document.getElementById('shape-3');
+        shape3.addEventListener('click', () => {
+            // Generates a random number between 0 and 360
+            const randomHue = Math.floor(Math.random() * 360);
+            // Generates a random scale between 0.5 and 1.5
+            const randomScale = (Math.random() * 1) + 0.5; 
+            
+            // TODO: Apply the randomHue to a hsl() background color
+            shape3.style.background = `hsl(${randomHue}, 80%, 50%)`;
+            // TODO: Apply the randomScale to the transform property
+            shape3.style.transform = `scale(${randomScale})`;
+        });
+
+        // --- 4. The Tracker ---
+        const stage4 = document.getElementById('stage-4');
+        stage4.addEventListener('mousemove', (event) => {
+            // Get the bounding box of the stage
+            const rect = stage4.getBoundingClientRect();
+            // Calculate mouse position as a percentage relative to the stage
+            const xPercent = ((event.clientX - rect.left) / rect.width) * 100;
+            const yPercent = ((event.clientY - rect.top) / rect.height) * 100;
+
+            // TODO: Update the CSS variables --mouse-x and --mouse-y on stage4
+            // stage4.style.setProperty('...', `...%`);
+            stage4.style.setProperty('--mouse-x', `${xPercent}%`);
+            stage4.style.setProperty('--mouse-y', `${yPercent}%`);
+        });
+
+        // --- 5. The Observer ---
+        const shape5 = document.getElementById('shape-5');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                // TODO: If entry.isIntersecting is true, add 'is-visible' to entry.target
+                if(entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                } else {
+                    // Optional: Remove it when it leaves so it animates every time
+                    entry.target.classList.remove('is-visible');
+                }
+            });
+        }, { threshold: 0.5 });
+        // Start observing shape5
+        observer.observe(shape5);
+
+        // --- 6. The Metronome ---
+        const shape6 = document.getElementById('shape-6');
+        // TODO: Wrap the code below in a setInterval() that runs every 800ms
+        setInterval(() => {
+            shape6.classList.toggle('is-ticking');
+        }, 800);
+
+        // --- 7. The Fluid Engine ---
+        const shape7 = document.getElementById('shape-7');
+        let rotation = 0;
+        function animateFrame() {
+            rotation += 2; // Increase degrees by 2 every frame
+            shape7.style.transform = `rotate(${rotation}deg)`;
+            
+            // TODO: Call requestAnimationFrame(animateFrame) to keep the loop going!
+            requestAnimationFrame(animateFrame);
+        }
+        // Start the loop
+        animateFrame();
+
+        // --- 8. The Keypress ---
+        const shape8 = document.getElementById('shape-8');
+        window.addEventListener('keydown', (event) => {
+            // TODO: Check if event.code === 'Space'
+            if (event.code === 'Space') {
+                // Prevent the default spacebar scroll
+                event.preventDefault(); 
+                
+                // Temporarily bump it up
+                shape8.style.transform = 'translateY(-40px)';
+                
+                // Fall back down after 150ms
+                setTimeout(() => {
+                    shape8.style.transform = 'translateY(0)';
+                }, 150);
+            }
+        });
+
+        // --- 9. The Delay ---
+        const shape9 = document.getElementById('shape-9');
+        shape9.addEventListener('click', () => {
+            shape9.innerText = "Wait...";
+            shape9.style.background = "#f43f5e";
+
+            // TODO: Use setTimeout to revert the text and color after 1500 milliseconds
+            setTimeout(() => {
+                shape9.innerText = "Wait for it";
+                shape9.style.background = "var(--shape-bg)";
+            }, 1500);
+        });
+
+        // --- 10. The Chain Reaction ---
+        const stage10 = document.getElementById('stage-10');
+        const items = document.querySelectorAll('.chain-item');
+        
+        stage10.addEventListener('mouseenter', () => {
+            items.forEach((item, index) => {
+                // TODO: Use setTimeout inside this loop. 
+                // Multiply the index by 100ms to stagger the animation!
+                setTimeout(() => {
+                    item.classList.add('chain-active');
+                }, index * 100); 
+            });
+        });
+
+        stage10.addEventListener('mouseleave', () => {
+            // Reset them immediately on leave
+            items.forEach((item) => {
+                item.classList.remove('chain-active');
+            });
+        });
+
+    </script>
+</body>
+</html>
