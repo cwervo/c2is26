@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JS Animation Pair Lab: 10 Ways to Move</title>
+    <title>JS Animation Pair Lab: 10 Beginner Basics</title>
     <style>
         /* ========================================================================
            BASE STYLES: The Canvas
@@ -14,7 +14,7 @@
             --card-bg: #ffffff;
             --border: #e5e5e5;
             --accent: #2563eb;
-            --shape-bg: #d4d4d8;
+            --shape-bg: #3f3f46;
         }
 
         body {
@@ -72,13 +72,25 @@
 
         .swap-alert {
             display: inline-block;
-            background: #fef08a;
-            color: #854d0e;
+            background: #dbeafe;
+            color: #1e40af;
             padding: 0.25rem 0.5rem;
             border-radius: 4px;
             font-weight: bold;
             font-size: 0.8rem;
             margin-bottom: 1rem;
+        }
+
+        .mdn-link {
+            display: inline-block;
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .mdn-link:hover {
+            text-decoration: underline;
         }
 
         /* The Playground Elements */
@@ -103,64 +115,63 @@
             align-items: center;
             justify-content: center;
             font-weight: bold;
+            font-size: 1.2rem;
             color: white;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Smooth default transition */
+            transition: all 0.4s ease; /* Default smooth animation */
             cursor: pointer;
+            text-align: center;
+            user-select: none;
         }
 
         /* ========================================================================
-           CUSTOM CSS CLASSES: Modify these to change the animations!
+           CUSTOM CSS CLASSES: Apply these using JavaScript!
            ======================================================================== */
         
-        /* Ex 1: The Toggle */
-        .is-toggled {
-            background: #ef4444;
-            transform: scale(1.2) rotate(15deg);
+        /* Ex 1 */
+        .is-active {
+            background-color: #ef4444;
+            transform: scale(1.2) rotate(10deg);
+        }
+
+        /* Ex 2 */
+        .is-spinning {
+            transform: rotate(180deg);
             border-radius: 50%;
+            background-color: #8b5cf6;
         }
 
-        /* Ex 2: Hover State is handled purely in JS for this example */
-
-        /* Ex 3: Randomness */
-        .randomized {
-            /* Styles applied via inline JS! */
-        }
-
-        /* Ex 4: CSS Variables for Mouse Tracking */
-        #stage-4 {
-            --mouse-x: 50%;
-            --mouse-y: 50%;
-        }
-        #shape-4 {
-            /* This gradient moves with the mouse via JS updating the variables */
-            background: radial-gradient(circle at var(--mouse-x) var(--mouse-y), #8b5cf6 0%, var(--shape-bg) 70%);
-        }
-
-        /* Ex 5: Scroll Observer */
-        #shape-5 {
+        /* Ex 3 */
+        .is-invisible {
             opacity: 0;
-            transform: translateY(50px);
-            transition: all 1s ease-out;
-        }
-        #shape-5.is-visible {
-            opacity: 1;
-            transform: translateY(0);
-            background: #10b981;
+            pointer-events: none;
         }
 
-        /* Ex 6: The Metronome */
-        .is-ticking {
-            transform: scale(0.8);
-            background: #f59e0b;
+        /* Ex 5 */
+        .is-shifted {
+            transform: translateX(50px);
+            background-color: #10b981;
         }
 
-        /* Ex 10: Chain Reaction */
-        .chain-item {
-            width: 30px; height: 30px; margin: 0 5px; background: var(--shape-bg); transition: all 0.4s ease;
+        /* Ex 6 */
+        .is-pulsing {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+            background-color: #f59e0b;
         }
-        .chain-active {
-            transform: translateY(-20px);
-            background: #ec4899;
+
+        /* Ex 8 */
+        .mini-box {
+            width: 40px; height: 40px; margin: 5px; background: var(--shape-bg); transition: all 0.5s;
+        }
+        .is-round {
+            border-radius: 50%;
+            background-color: #ec4899;
+        }
+
+        /* Ex 9 */
+        .is-jumping {
+            transform: translateY(-40px);
+            background-color: #06b6d4;
         }
 
     </style>
@@ -168,8 +179,8 @@
 <body>
 
     <header>
-        <h1>10 Ways to Move</h1>
-        <p>A pair-programming lab. Trade the keyboard (Driver) and the manual (Navigator) every time you see a <strong>SWAP</strong> badge. Experiment with the code and see how it breaks!</p>
+        <h1>10 Beginner Basics</h1>
+        <p>A pair-programming lab. Trade the keyboard (Driver) and the manual (Navigator) every time you see a <strong>SWAP</strong> badge. Fill in the empty JS blocks!</p>
     </header>
 
     <div class="lab-container">
@@ -178,9 +189,10 @@
         <div class="challenge-card">
             <div class="instructions">
                 <span class="swap-alert">DRIVER 1</span>
-                <h2>1. The Basic Toggle (Click)</h2>
-                <p><strong>Focus:</strong> Toggling CSS classes.</p>
-                <p>Clicking the shape toggles a class. In the CSS above, modify <code>.is-toggled</code> to make it do something wilder than just turning red and rotating.</p>
+                <h2>1. The Toggle (Click)</h2>
+                <p><strong>Focus:</strong> Toggling a CSS class.</p>
+                <p>When the shape is clicked, toggle the <code>.is-active</code> class on and off.</p>
+                <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/classList" target="_blank" class="mdn-link">📚 MDN: Element.classList</a>
             </div>
             <div class="stage" id="stage-1"><div class="shape" id="shape-1">Click</div></div>
         </div>
@@ -189,9 +201,10 @@
         <div class="challenge-card">
             <div class="instructions">
                 <span class="swap-alert">SWAP! DRIVER 2</span>
-                <h2>2. The Hover (Mouseenter / Mouseleave)</h2>
-                <p><strong>Focus:</strong> Hover events & text manipulation.</p>
-                <p>Update the JavaScript so the text inside the box changes when you hover, and changes back when the mouse leaves. Make it change its width too.</p>
+                <h2>2. The Hover (Mouse Enter/Leave)</h2>
+                <p><strong>Focus:</strong> Adding and removing classes.</p>
+                <p>Add the <code>.is-spinning</code> class when the mouse enters, and remove it when the mouse leaves.</p>
+                <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/mouseenter_event" target="_blank" class="mdn-link">📚 MDN: mouseenter event</a>
             </div>
             <div class="stage" id="stage-2"><div class="shape" id="shape-2">Hover</div></div>
         </div>
@@ -200,90 +213,104 @@
         <div class="challenge-card">
             <div class="instructions">
                 <span class="swap-alert">SWAP! DRIVER 1</span>
-                <h2>3. The Randomizer (Math.random)</h2>
-                <p><strong>Focus:</strong> Inline style manipulation & Math.</p>
-                <p>Every time you click, generate a random color or a random scale value. We provided the math logic, you apply it to the element's style.</p>
+                <h2>3. The Double Click (Dblclick)</h2>
+                <p><strong>Focus:</strong> Different mouse events.</p>
+                <p>Listen for a <code>dblclick</code> event. When triggered, add the <code>.is-invisible</code> class.</p>
+                <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/dblclick_event" target="_blank" class="mdn-link">📚 MDN: dblclick event</a>
             </div>
-            <div class="stage" id="stage-3"><div class="shape" id="shape-3">Chaos</div></div>
+            <div class="stage" id="stage-3"><div class="shape" id="shape-3">x2</div></div>
         </div>
 
         <!-- Example 4 -->
         <div class="challenge-card">
             <div class="instructions">
                 <span class="swap-alert">SWAP! DRIVER 2</span>
-                <h2>4. The Tracker (Mousemove)</h2>
-                <p><strong>Focus:</strong> Connecting JS math to CSS Variables.</p>
-                <p>We are tracking the mouse's X and Y position inside the stage. Update the code to pass those numbers into the CSS variables so the gradient follows your cursor.</p>
+                <h2>4. The Grow Box (Variables)</h2>
+                <p><strong>Focus:</strong> Using variables to store state.</p>
+                <p>Every time you click, increase the <code>size</code> variable by 20, and update the inline width and height of the box.</p>
+                <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/style" target="_blank" class="mdn-link">📚 MDN: HTMLElement.style</a>
             </div>
-            <div class="stage" id="stage-4"><div class="shape" id="shape-4" style="width:100%; height:100%; border-radius:0;">Track</div></div>
+            <div class="stage" id="stage-4"><div class="shape" id="shape-4">Grow</div></div>
         </div>
 
         <!-- Example 5 -->
         <div class="challenge-card">
             <div class="instructions">
                 <span class="swap-alert">SWAP! DRIVER 1</span>
-                <h2>5. The Observer (Scroll)</h2>
-                <p><strong>Focus:</strong> Intersection Observer API.</p>
-                <p>This shape is invisible. When you scroll it into view, the Observer detects it. Add the logic to add the <code>.is-visible</code> class when it intersects.</p>
+                <h2>5. The Delay (setTimeout)</h2>
+                <p><strong>Focus:</strong> Making things wait.</p>
+                <p>On click, use a <code>setTimeout</code> to wait 2000ms (2 seconds) before adding the <code>.is-shifted</code> class.</p>
+                <a href="https://developer.mozilla.org/en-US/docs/Web/API/setTimeout" target="_blank" class="mdn-link">📚 MDN: setTimeout()</a>
             </div>
-            <div class="stage" id="stage-5"><div class="shape" id="shape-5">Hello!</div></div>
+            <div class="stage" id="stage-5"><div class="shape" id="shape-5" style="font-size: 1rem;">Wait for it</div></div>
         </div>
 
         <!-- Example 6 -->
         <div class="challenge-card">
             <div class="instructions">
                 <span class="swap-alert">SWAP! DRIVER 2</span>
-                <h2>6. The Metronome (setInterval)</h2>
-                <p><strong>Focus:</strong> Time-based loops.</p>
-                <p>This animation happens without the user. Set an interval to toggle the <code>.is-ticking</code> class on the shape every 800 milliseconds.</p>
+                <h2>6. The Pulse (setInterval)</h2>
+                <p><strong>Focus:</strong> Repeating timers.</p>
+                <p>Use <code>setInterval</code> to automatically toggle the <code>.is-pulsing</code> class every 800ms. No clicking required!</p>
+                <a href="https://developer.mozilla.org/en-US/docs/Web/API/setInterval" target="_blank" class="mdn-link">📚 MDN: setInterval()</a>
             </div>
-            <div class="stage" id="stage-6"><div class="shape" id="shape-6">Tick</div></div>
+            <div class="stage" id="stage-6"><div class="shape" id="shape-6">Pulse</div></div>
         </div>
 
         <!-- Example 7 -->
         <div class="challenge-card">
             <div class="instructions">
                 <span class="swap-alert">SWAP! DRIVER 1</span>
-                <h2>7. The Fluid Engine (requestAnimationFrame)</h2>
-                <p><strong>Focus:</strong> 60fps continuous animation.</p>
-                <p>Instead of relying on CSS transitions, use JS to continuously update the rotation variable frame-by-frame. Un-comment the requestAnimationFrame call!</p>
+                <h2>7. The Slider (Input Event)</h2>
+                <p><strong>Focus:</strong> Reading values from HTML forms.</p>
+                <p>Listen to the range slider. When it moves, get its value and apply it to the shape's rotation.</p>
+                <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/input_event" target="_blank" class="mdn-link">📚 MDN: input event</a>
             </div>
-            <div class="stage" id="stage-7"><div class="shape" id="shape-7">Spin</div></div>
+            <div class="stage" id="stage-7" style="flex-direction: column; gap: 20px;">
+                <div class="shape" id="shape-7">Twist</div>
+                <input type="range" id="slider-7" min="0" max="360" value="0">
+            </div>
         </div>
 
         <!-- Example 8 -->
         <div class="challenge-card">
             <div class="instructions">
                 <span class="swap-alert">SWAP! DRIVER 2</span>
-                <h2>8. The Keypress (keydown)</h2>
-                <p><strong>Focus:</strong> Global window events.</p>
-                <p>Listen for specific keys on your keyboard (like 'Space' or 'ArrowRight'). Make the box jump or move when you press that key.</p>
+                <h2>8. The Group (querySelectorAll)</h2>
+                <p><strong>Focus:</strong> Loops and arrays.</p>
+                <p>Click the button to loop through ALL the mini-boxes using <code>forEach</code>, and toggle the <code>.is-round</code> class on each one.</p>
+                <a href="https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelectorAll" target="_blank" class="mdn-link">📚 MDN: querySelectorAll()</a>
             </div>
-            <div class="stage" id="stage-8"><div class="shape" id="shape-8">Press Space</div></div>
+            <div class="stage" id="stage-8" style="flex-direction: column; gap: 20px;">
+                <div style="display: flex;">
+                    <div class="mini-box"></div><div class="mini-box"></div><div class="mini-box"></div>
+                </div>
+                <button id="button-8" style="padding: 10px 20px; cursor: pointer;">Transform All</button>
+            </div>
         </div>
 
         <!-- Example 9 -->
         <div class="challenge-card">
             <div class="instructions">
                 <span class="swap-alert">SWAP! DRIVER 1</span>
-                <h2>9. The Delay (setTimeout)</h2>
-                <p><strong>Focus:</strong> Asynchronous timing.</p>
-                <p>When clicked, change the background color. But wait exactly 1.5 seconds (1500ms) before changing it back using <code>setTimeout</code>.</p>
+                <h2>9. The Keyboard (Keydown)</h2>
+                <p><strong>Focus:</strong> Global window events.</p>
+                <p>Listen to the <code>window</code> for a key press. Add <code>.is-jumping</code> when any key goes down, and remove it when the key goes up.</p>
+                <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/keydown_event" target="_blank" class="mdn-link">📚 MDN: keydown event</a>
             </div>
-            <div class="stage" id="stage-9"><div class="shape" id="shape-9">Wait for it</div></div>
+            <div class="stage" id="stage-9"><div class="shape" id="shape-9" style="font-size: 0.9rem;">Press Any Key</div></div>
         </div>
 
         <!-- Example 10 -->
         <div class="challenge-card">
             <div class="instructions">
                 <span class="swap-alert">SWAP! DRIVER 2</span>
-                <h2>10. The Chain Reaction (forEach + Index)</h2>
-                <p><strong>Focus:</strong> Staggering multiple elements.</p>
-                <p>We created 5 small boxes. When the stage is hovered, loop through them and use their <code>index</code> to delay their animation, creating a wave effect.</p>
+                <h2>10. The Randomizer (Arrays &amp; Math)</h2>
+                <p><strong>Focus:</strong> Picking from an array.</p>
+                <p>We provided an array of colors. On click, pick a random number, use it to select a color from the array, and apply it to the background.</p>
+                <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random" target="_blank" class="mdn-link">📚 MDN: Math.random()</a>
             </div>
-            <div class="stage" id="stage-10">
-                <div class="chain-item"></div><div class="chain-item"></div><div class="chain-item"></div><div class="chain-item"></div><div class="chain-item"></div>
-            </div>
+            <div class="stage" id="stage-10"><div class="shape" id="shape-10" style="font-size: 1rem;">Random</div></div>
         </div>
 
     </div>
@@ -294,144 +321,119 @@
            Read the comments and complete the TODOs!
            ======================================================================== */
 
-        // --- 1. The Basic Toggle ---
+        // --- 1. The Toggle ---
         const shape1 = document.getElementById('shape-1');
-        shape1.addEventListener('click', () => {
-            // TODO: Toggle the 'is-toggled' class on shape1
-            shape1.classList.toggle('is-toggled');
-        });
+        // TODO: Listen for 'click'. 
+        // Hint: shape1.addEventListener('click', function() { ... });
+        // Inside, use shape1.classList.toggle('is-active');
+        // YOUR CODE HERE:
+        
+
+
 
         // --- 2. The Hover ---
         const shape2 = document.getElementById('shape-2');
-        shape2.addEventListener('mouseenter', () => {
-            // TODO: Change the innerText to something else
-            shape2.innerText = "Whoa!";
-            // TODO: Change the element's width using inline styles
-            shape2.style.width = "150px";
-            shape2.style.background = "#8b5cf6";
-        });
-        shape2.addEventListener('mouseleave', () => {
-            // TODO: Reset the text and styles when the mouse leaves
-            shape2.innerText = "Hover";
-            shape2.style.width = "80px";
-            shape2.style.background = "var(--shape-bg)";
-        });
-
-        // --- 3. The Randomizer ---
-        const shape3 = document.getElementById('shape-3');
-        shape3.addEventListener('click', () => {
-            // Generates a random number between 0 and 360
-            const randomHue = Math.floor(Math.random() * 360);
-            // Generates a random scale between 0.5 and 1.5
-            const randomScale = (Math.random() * 1) + 0.5; 
-            
-            // TODO: Apply the randomHue to a hsl() background color
-            shape3.style.background = `hsl(${randomHue}, 80%, 50%)`;
-            // TODO: Apply the randomScale to the transform property
-            shape3.style.transform = `scale(${randomScale})`;
-        });
-
-        // --- 4. The Tracker ---
-        const stage4 = document.getElementById('stage-4');
-        stage4.addEventListener('mousemove', (event) => {
-            // Get the bounding box of the stage
-            const rect = stage4.getBoundingClientRect();
-            // Calculate mouse position as a percentage relative to the stage
-            const xPercent = ((event.clientX - rect.left) / rect.width) * 100;
-            const yPercent = ((event.clientY - rect.top) / rect.height) * 100;
-
-            // TODO: Update the CSS variables --mouse-x and --mouse-y on stage4
-            // stage4.style.setProperty('...', `...%`);
-            stage4.style.setProperty('--mouse-x', `${xPercent}%`);
-            stage4.style.setProperty('--mouse-y', `${yPercent}%`);
-        });
-
-        // --- 5. The Observer ---
-        const shape5 = document.getElementById('shape-5');
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                // TODO: If entry.isIntersecting is true, add 'is-visible' to entry.target
-                if(entry.isIntersecting) {
-                    entry.target.classList.add('is-visible');
-                } else {
-                    // Optional: Remove it when it leaves so it animates every time
-                    entry.target.classList.remove('is-visible');
-                }
-            });
-        }, { threshold: 0.5 });
-        // Start observing shape5
-        observer.observe(shape5);
-
-        // --- 6. The Metronome ---
-        const shape6 = document.getElementById('shape-6');
-        // TODO: Wrap the code below in a setInterval() that runs every 800ms
-        setInterval(() => {
-            shape6.classList.toggle('is-ticking');
-        }, 800);
-
-        // --- 7. The Fluid Engine ---
-        const shape7 = document.getElementById('shape-7');
-        let rotation = 0;
-        function animateFrame() {
-            rotation += 2; // Increase degrees by 2 every frame
-            shape7.style.transform = `rotate(${rotation}deg)`;
-            
-            // TODO: Call requestAnimationFrame(animateFrame) to keep the loop going!
-            requestAnimationFrame(animateFrame);
-        }
-        // Start the loop
-        animateFrame();
-
-        // --- 8. The Keypress ---
-        const shape8 = document.getElementById('shape-8');
-        window.addEventListener('keydown', (event) => {
-            // TODO: Check if event.code === 'Space'
-            if (event.code === 'Space') {
-                // Prevent the default spacebar scroll
-                event.preventDefault(); 
-                
-                // Temporarily bump it up
-                shape8.style.transform = 'translateY(-40px)';
-                
-                // Fall back down after 150ms
-                setTimeout(() => {
-                    shape8.style.transform = 'translateY(0)';
-                }, 150);
-            }
-        });
-
-        // --- 9. The Delay ---
-        const shape9 = document.getElementById('shape-9');
-        shape9.addEventListener('click', () => {
-            shape9.innerText = "Wait...";
-            shape9.style.background = "#f43f5e";
-
-            // TODO: Use setTimeout to revert the text and color after 1500 milliseconds
-            setTimeout(() => {
-                shape9.innerText = "Wait for it";
-                shape9.style.background = "var(--shape-bg)";
-            }, 1500);
-        });
-
-        // --- 10. The Chain Reaction ---
-        const stage10 = document.getElementById('stage-10');
-        const items = document.querySelectorAll('.chain-item');
+        // TODO: Listen for 'mouseenter', add 'is-spinning' using classList.add()
+        // TODO: Listen for 'mouseleave', remove 'is-spinning' using classList.remove()
+        // YOUR CODE HERE:
         
-        stage10.addEventListener('mouseenter', () => {
-            items.forEach((item, index) => {
-                // TODO: Use setTimeout inside this loop. 
-                // Multiply the index by 100ms to stagger the animation!
-                setTimeout(() => {
-                    item.classList.add('chain-active');
-                }, index * 100); 
-            });
+
+
+
+        // --- 3. The Double Click ---
+        const shape3 = document.getElementById('shape-3');
+        // TODO: Listen for 'dblclick'
+        // Inside, use shape3.classList.add('is-invisible')
+        // YOUR CODE HERE:
+        
+
+
+
+        // --- 4. The Grow Box ---
+        const shape4 = document.getElementById('shape-4');
+        let currentSize = 80; // Starts at 80px
+        
+        shape4.addEventListener('click', function() {
+            // TODO: Add 20 to currentSize (currentSize = currentSize + 20)
+            // TODO: Apply it to the width AND height using inline styles
+            // Hint: shape4.style.width = currentSize + "px";
+            // YOUR CODE HERE:
+            
+            
         });
 
-        stage10.addEventListener('mouseleave', () => {
-            // Reset them immediately on leave
-            items.forEach((item) => {
-                item.classList.remove('chain-active');
-            });
+        // --- 5. The Delay ---
+        const shape5 = document.getElementById('shape-5');
+        shape5.addEventListener('click', function() {
+            shape5.innerText = "Wait...";
+            
+            // TODO: Use setTimeout(function() { ... }, 2000);
+            // Inside the timeout, add the 'is-shifted' class to shape5
+            // YOUR CODE HERE:
+            
+
+        });
+
+        // --- 6. The Pulse ---
+        const shape6 = document.getElementById('shape-6');
+        // TODO: Create a setInterval(function() { ... }, 800);
+        // Inside it, toggle the 'is-pulsing' class on shape6.
+        // YOUR CODE HERE:
+        
+
+
+        // --- 7. The Slider ---
+        const shape7 = document.getElementById('shape-7');
+        const slider7 = document.getElementById('slider-7');
+        
+        slider7.addEventListener('input', function(event) {
+            // event.target.value gives you the number from the slider!
+            let rotationValue = event.target.value;
+            
+            // TODO: Apply the rotationValue to shape7's transform style.
+            // Hint: shape7.style.transform = `rotate(${rotationValue}deg)`;
+            // YOUR CODE HERE:
+            
+
+        });
+
+        // --- 8. The Group ---
+        const button8 = document.getElementById('button-8');
+        // querySelectorAll grabs an array-like list of all elements with this class
+        const allMiniBoxes = document.querySelectorAll('.mini-box');
+        
+        button8.addEventListener('click', function() {
+            // TODO: Loop through allMiniBoxes using .forEach
+            // Hint: allMiniBoxes.forEach(function(box) { ... })
+            // Inside the loop, toggle the 'is-round' class on each 'box'
+            // YOUR CODE HERE:
+            
+
+        });
+
+        // --- 9. The Keyboard ---
+        const shape9 = document.getElementById('shape-9');
+        // TODO: Listen to the 'window' for 'keydown', and add 'is-jumping' to shape9
+        // TODO: Listen to the 'window' for 'keyup', and remove 'is-jumping' from shape9
+        // YOUR CODE HERE:
+        
+
+
+        // --- 10. The Randomizer ---
+        const shape10 = document.getElementById('shape-10');
+        // Here is an array (list) of 5 color hex codes
+        const colors = ['#ef4444', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6'];
+        
+        shape10.addEventListener('click', function() {
+            // This math generates a random number between 0 and 4
+            let randomIndex = Math.floor(Math.random() * colors.length);
+            
+            // TODO: Get a color from the array using the random index
+            // Hint: let chosenColor = colors[randomIndex];
+            // TODO: Apply that color to shape10.style.backgroundColor
+            // YOUR CODE HERE:
+            
+
         });
 
     </script>
